@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        /*Fitur*/
+        h2 {
+            font-size: 40px;
+            font-family: "Playfair Display", serif;
+            margin: 0;
+            text-align: left;
+            border-bottom: 3px solid rgb(0, 0, 0); /* Garis bawah dengan ketebalan 2px */
+            display: inline-block;
+        }
+        
+        /*Isi Fitur*/
+        p {
+            font-size: 18px;
+            margin: 0;
+            font-family: "Playfair Display", serif;
+        }
+       
+        /* Kontainer utama untuk menampung chat container dan text container */
+        .main-container {
+            display: flex;
+            gap: 30px; /* Jarak antara chat container dan text container */
+        }
+
+        /* Textbox container di sebelah kiri */
+        .text-container {
+            width: 200px;
+            background-color: #e0e0e0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Chat container di sebelah kanan */
+        .chat-container {
+            width: 400px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
+        
+        .chat-box .message { margin-bottom: 15px; }
+        .chat-box .user { text-align: right; color: #0000ff; }
+        .chat-box .bot { text-align: left; color: #007700; }
+
+        .input-container { margin-top: 15px; }
+        .input-container input { width: 300px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .input-container button {
+            padding: 10px; border: none; background-color: #007bff; color: white;
+            border-radius: 5px; cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Textbox container di sebelah kiri -->
+        <div class="text-container">
+            <h2>Fitur<br>
+            
+            </h2>
+
+
+            <p><br>Isi Fitur 1 <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- Point 1 <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- Point 2 <br><br>
+            </p>
+            
+            <p>isi fitur 2</p>
+            <p>isi fitur 3</p>
+            <p>isi fitur 4</p>
+            
+        </div>
+        
+        <!-- Chat container di sebelah kanan -->
+        <div class="chat-container">
+            <div class="chat-box" id="chatbox">
+                <p class="botText"><span>Halo!</span></p>
+            </div>
+            <div class="input-container">
+                <input type="text" id="textInput" placeholder="Type your message here">
+                <button onclick="getUserResponse()">Send</button>
+            </div>
+        </div>
+    </div>v
+
+    <script>
+        function getUserResponse() {
+            var userText = $('#textInput').val();
+            var userHTML = "<p class='user'><span>" + userText + "</span></p>";
+            $('#chatbox').append(userHTML);
+            $('#textInput').val("");
+            $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+
+            $.get("/get", { userMessage: userText }).done(function(data) {
+                var botHTML = "<p class='bot'><span>" + data + "</span></p>";
+                $('#chatbox').append(botHTML);
+                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+            });
+        }
+
+        $('#textInput').keypress(function(e) {
+            if (e.which == 13) {
+                getUserResponse();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
